@@ -2,7 +2,7 @@
 
 Este repositorio contiene una colección de 4 laboratorios prácticos de AWS desarrollados siguiendo las metodologías de Morris & Opazo, enfocados en servicios fundamentales de la nube.
 
-## 📋 Laboratorios Incluidos
+## Laboratorios Incluidos
 
 ### Lab 01: RDS Fundamentals
 
@@ -40,7 +40,7 @@ Este repositorio contiene una colección de 4 laboratorios prácticos de AWS des
 - **Destacado:** Consultas SQL sobre archivos CSV, creación de tablas
 - **Duración:** ~60 minutos
 
-## 🛠️ Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 - **Bases de Datos:** Amazon RDS (SQL Server), Amazon DynamoDB, Amazon Redshift
 - **Compute:** AWS Lambda
@@ -51,7 +51,7 @@ Este repositorio contiene una colección de 4 laboratorios prácticos de AWS des
 - **Networking:** VPC, Security Groups, Subnet Groups
 - **Tools:** AWS CloudShell
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 aws-labs-morris-opazo/
@@ -65,7 +65,7 @@ aws-labs-morris-opazo/
 └── lab-04-athena-quest/               # Analytics con Athena
 ```
 
-## 🚀 Cómo Usar Este Repositorio
+## Cómo Usar Este Repositorio
 
 1. **Clona el repositorio**:
    
@@ -86,22 +86,22 @@ aws-labs-morris-opazo/
 
 4. **Sigue el README específico** de cada lab para instrucciones detalladas
 
-## 📖 Documentación
+## Documentación
 
 Cada laboratorio incluye:
 
-- ✅ README específico con instrucciones paso a paso
-- 🖼️ Screenshots del proceso completo
-- 📊 Diagramas de arquitectura
-- 💾 Scripts y código fuente
-- 🧪 Casos de prueba y validación
+- README específico con instrucciones paso a paso
+- Screenshots del proceso completo
+- Diagramas de arquitectura
+- Scripts y código fuente
+- Casos de prueba y validación
 
 **Documentación adicional:**
 
-- 📄 Reportes detallados en PDF disponibles en la carpeta `docs/`
-- 🎥 Referencias a videos guía cuando están disponibles
+- Reportes detallados en PDF disponibles en la carpeta `docs/`
+- Referencias a videos guía cuando están disponibles
 
-## 📝 Aprendizajes Clave
+## Aprendizajes Clave
 
 1. **Fundamentos RDS:** Configuración de bases de datos relacionales en la nube
 2. **Migración de Datos:** Uso de DMS para migrar entre diferentes motores de BD
@@ -110,31 +110,31 @@ Cada laboratorio incluye:
 5. **Networking AWS:** Configuración de VPC, subredes y grupos de seguridad
 6. **IAM y Permisos:** Gestión de roles y políticas para servicios AWS
 
-## 🎯 Casos de Uso Prácticos
+## Casos de Uso Prácticos
 
 - **Migración de aplicaciones legacy** a la nube
 - **APIs REST serverless** para aplicaciones modernas
 - **Data Lake y análisis** de grandes volúmenes de datos
 - **Arquitecturas híbridas** con diferentes servicios de AWS
 
-## ⚡ Consejos Importantes
+## Consejos Importantes
 
 - **Región:** Todos los labs están configurados para `us-east-1`
 - **Costos:** Cada lab incluye instrucciones de cleanup para evitar costos
 - **Prerequisites:** Verificar que tienes acceso a los servicios AWS necesarios
 - **Orden:** Los Labs 01 y 02 deben realizarse secuencialmente
 
-## 👨‍💻 Autor
+## Autor
 
 **Christhian Alberto Rodríguez García**  
 Laboratorios realizados como parte del programa de capacitación AWS de Morris & Opazo
 
-## 📊 Estadísticas del Proyecto
+## Estadísticas del Proyecto
 
-- 🔢 **4 laboratorios** completos
-- 📁 **24 directorios** organizados
-- 📄 **92 archivos** documentados
-- ⏱️ **~3 horas** de contenido práctico
+- **4 laboratorios** completos
+- **24 directorios** organizados
+- **92 archivos** documentados
+- **3 horas** de contenido práctico
 
 ---
 
