@@ -56,6 +56,9 @@ Este repositorio contiene una colección de 4 laboratorios prácticos de AWS des
 ```
 aws-labs-morris-opazo/
 ├── README.md                           # Este archivo
+├── docs/                               # Documentación general
+│   ├── lab-01-rds-fundamentals-report.pdf
+│   └── lab-03-serverless-report.pdf
 ├── lab-01-rds-fundamentals/           # RDS y configuración de BD
 ├── lab-02-dms-migration/              # Migración con DMS  
 ├── lab-03-serverless/                 # Arquitectura serverless
