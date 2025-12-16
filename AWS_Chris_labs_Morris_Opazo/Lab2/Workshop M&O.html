@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<!-- saved from url=(0026)https://workshop-mo.click/ -->
+<html lang="es" data-lt-installed="true"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop M&amp;O</title>
+    <link rel="stylesheet" href="./Workshop M&amp;O_files/style.css">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/sebasshb/stibaquira-elabs2025rlanda/refs/heads/main/public/favicon.ico">
+</head>
+<body>
+    <div class="background-container">
+        <div class="background-glow"></div>
+        <div id="login-modal" class="modal hidden">
+            <img src="./Workshop M&amp;O_files/LogoMYO.png" alt="Logo Workshop" class="login-logo">
+            <div class="modal-content">
+                <h2>Iniciar Sesión</h2>
+                <form id="login-form">
+                    <label for="username">Email o UserID:</label>
+                    <input type="text" id="username" name="username" required="">
+                    
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" required="">
+                    
+                    <button type="submit" class="submit-button">Ingresar</button>
+                </form>
+                <p id="login-error" class="error-message"></p>
+            </div>
+        </div>
+
+        <div id="app-content" class="">
+            <div class="container">
+                <nav class="sidebar">
+                    <img src="./Workshop M&amp;O_files/LogoMYO.png" alt="Logo" class="sidebar-logo">
+                    
+                    <h2>Laboratorios</h2>
+                    <button onclick="loadLabContent(&#39;lab1.md&#39;)" class="lab-button">Lab 1</button>
+                    <button onclick="loadLabContent(&#39;lab2.md&#39;)" class="lab-button">Lab 2</button>
+                    <button onclick="loadLabContent(&#39;lab3.md&#39;)" class="lab-button">Lab 3</button>
+                    <button onclick="loadLabContent(&#39;lab4.md&#39;)" class="lab-button">Lab 4</button>
+                    <button onclick="logout()" class="logout-button">Cerrar Sesión</button>
+                    <p id="user-display" class="user-info">Sesión iniciada como:<br><strong>Christhian Rodriguez</strong></p>
+                    <img src="./Workshop M&amp;O_files/mario1.gif" alt="Mario 8-bit" class="mario-sidebar-gif">
+                </nav>
+
+                <main class="content" id="content-area">
+    <div class="audio-player-container">
+      <div class="audio-player-container-inner">
+        <h3>Escucha la guía del laboratorio 🎧</h3>
+        <audio controls="" src="lab2.wav"></audio>
+        <button class="start-lab-button" onclick="openStartLabModal(&#39;lab2.md&#39;)">Start Lab</button>
+      </div>
+    </div>
+  <div class="md-body"><h1>Guía Laboratorio de Migración de Datos AWS DMS</h1>
+<p>Nota Inicial: La VPC con RDS se levanta automáticamente desde el template de CloudFormation. Se proporcionará a los alumnos un enlace a un S3 donde se encuentra el archivo worldurank.sql. Este script SQL deberá ser descargado y luego subido al entorno de CloudShell en la consola de AWS.</p>
+<p>Para descargar el script SQL necesario para este laboratorio, haz clic en el siguiente enlace: <a href="https://workshop-mo.s3.us-east-1.amazonaws.com/worldurank.sql">Descargar script SQL para Lab 2</a></p>
+<p><img src="./Workshop M&amp;O_files/LabDMSTemplateArch.png" alt="image" style="cursor: zoom-in;"></p>
+<h2>1. Instalación de sqlcmd en CloudShell</h2>
+<p><img src="./Workshop M&amp;O_files/Captura2.png" alt="image" style="cursor: zoom-in;"></p>
+<p>(recuerda subir el archivo .sql al CloudShell y verificas con $ ls que tenemos el archivo dentro)
+En la consola de AWS, arriba a la derecha habrá un logo de código, damos click y se abre el CloudShell. En el desplegable ‘Actions’ elegimos la opción “Upload File” y elegimos el archivo worldurank.sql que descargamos previamente.</p>
+<p>Estando en el ambiente, será necesario instalar sqlcmd.</p>
+<h3>1.1. Añadir el repositorio de Microsoft</h3>
+<pre><code class="language-bash">sudo curl https://packages.microsoft.com/config/rhel/7/prod.repo | sudo tee /etc/yum.repos.d/msprod.repo
+</code></pre>
+<h3>1.2. Instalar las herramientas y el driver ODBC</h3>
+<pre><code class="language-bash">sudo yum install -y mssql-tools msodbcsql17 
+</code></pre>
+<p>si te pide aceptar license terms, escribe ‘yes’ en el input.</p>
+<h3>1.3. Hacer que el comando sqlcmd sea permanente para futuras sesiones</h3>
+<pre><code class="language-bash">echo 'export PATH="$PATH:/opt/mssql-tools/bin"' &gt;&gt; ~/.bashrc
+</code></pre>
+<h3>1.4. Aplicar la configuración a la sesión actual</h3>
+<pre><code class="language-bash">source ~/.bashrc
+</code></pre>
+<h3>1.5. Verificar la instalación (opcional)</h3>
+<pre><code class="language-bash">sqlcmd -?
+</code></pre>
+<p>Output:</p>
+<pre><code class="language-bash">sqlcmd -?
+Microsoft (R) SQL Server Command Line Tool Version 17.10.0001.1 Linux Copyright (C) 2017 Microsoft…
+</code></pre>
+<h4>Aclaración: Basicamente, hemos instalado estas herramientas dentro de la shell para que podamos inyectar el contenido de nuestro archivo sql dentro de la instancia RDS sin necesidad de tener que hacerlo desde algun software externo.</h4>
+<h2>2. Creación de la Base de Datos en RDS</h2>
+<p>Una vez instalado sqlcmd, ejecuta el siguiente comando para crear una base de datos dentro de la instancia RDS:</p>
+<pre><code class="language-bash">sqlcmd -S RDS_ENDPOINT -U admin -P "#LabDBase3!" -Q "CREATE DATABASE UniversityDB;"
+</code></pre>
+<h4>IMPORTANTE: Reemplaza RDS_ENDPOINT por el endpoint de la RDS del laboratorio.</h4>
+<p>Para obtener el endpoint de nuestra RDS, vamos a la consola de Aurora and RDS y en los detalles de nuestra instancia saldrá el Endpoint para copiar.</p>
+<p>Un ejemplo de la endpoint de una instancia RDS es: 
+my-db-instance-identifier AWSIDENTIFIER.region.rds.amazonaws.com</p>
+<h2>3. Ejecución del Script SQL</h2>
+<p>Usa el siguiente comando para ejecutar el script worldurank.sql dentro de la base de datos recién creada:</p>
+<pre><code class="language-bash">sqlcmd -S RDS_ENDPOINT -U admin -P "#LabDBase3!" -d UniversityDB -i worldurank.sql
+</code></pre>
+<h4>IMPORTANTE: Reemplaza RDS_ENDPOINT por el endpoint de la RDS del laboratorio.</h4>
+<p>Si el output es algo como “(500 rows affected)” y mensajes similares, significa que funcionó correctamente</p>
+<h2>4. Verificación de la Importación de Datos</h2>
+<p>Para comprobar que los datos se importaron correctamente, consulta las primeras 5 filas de la tabla:</p>
+<pre><code class="language-bash">sqlcmd -S RDS_ENDPOINT -U admin -P "#LabDBase3!" -d UniversityDB -Q "SELECT TOP 5 * FROM UniversityScores;"
+</code></pre>
+<h4>IMPORTANTE: Reemplaza RDS_ENDPOINT por el endpoint de la RDS del laboratorio.</h4>
+<p>El output debería mostrar todas las columnas del archivo worldurank.sql. (no importa si no se visualiza como tabla)</p>
+<p><img src="./Workshop M&amp;O_files/Captura3.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<h2>5. Preparación para la Instancia DMS</h2>
+<p>Una vez verificado que la RDS tiene la base de datos con los datos insertados, proseguimos con el laboratorio. (Ya puedes cerrar el CloudShell)</p>
+<h2>6. Creación de Recursos Previos a DMS</h2>
+<p>Antes de iniciar con la creación de la instancia DMS, es necesario crear:</p>
+<ol>
+<li><p>Un Security Group para permitir las conexiones a los diferentes puntos de migración.</p>
+</li>
+<li><p>Un Subnet Group de replicación para configurar la instancia DMS.</p>
+</li>
+</ol>
+<h3>6.1. Creación del Security Group</h3>
+<p>En la AWS Management Console:</p>
+<ol>
+<li><p>Ve a EC2.</p>
+</li>
+<li><p>En el panel de navegación, selecciona Network &amp; Security &gt; Security Groups.</p>
+</li>
+<li><p>Haz clic en Create security group.</p>
+</li>
+</ol>
+<h4>Configuración del Security Group:</h4>
+<ul>
+<li><p>Selecciona la Lab-VPC.</p>
+</li>
+<li><p>Inbound rules:</p>
+<ul>
+<li><p>Regla 1 (por defecto):</p>
+<ul>
+<li>Type: All traffic</li>
+<li>Source: 0.0.0.0/0</li>
+</ul>
+</li>
+<li><p>Regla 2:</p>
+<ul>
+<li>Type: RDP</li>
+<li>Source: 0.0.0.0/0</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Finalmente, crea el Grupo de Seguridad.</p>
+<p><img src="./Workshop M&amp;O_files/Captura4.png" alt="image" style="cursor: zoom-in;"></p>
+<p><img src="./Workshop M&amp;O_files/Captura5.png" alt="image" style="cursor: zoom-in;"></p>
+<h2>7. Configuración en DMS (Database Migration Service)</h2>
+<p>Busca DMS dentro de la AWS Management Console y asegurate de desactivar esta opción:</p>
+<p><img src="./Workshop M&amp;O_files/tener desactivado el new navigation.png" alt="image" style="cursor: zoom-in;"></p>
+<h3>7.1. Creación del Subnet Group en DMS</h3>
+<ol>
+<li><p>En la página de DMS, ve a Subnet groups.</p>
+</li>
+<li><p>Haz clic en Create subnet group.</p>
+</li>
+<li><p>Name: dms-subnetgroup</p>
+</li>
+<li><p>VPC: Elige la Lab-VPC.</p>
+</li>
+<li><p>Add Subnets: Selecciona las 2 subnets de la Lab-VPC.</p>
+</li>
+<li><p>Agrega etiquetas (altamente recomendable) y haz clic en Create.</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura6.png" alt="image" style="cursor: zoom-in;"></p>
+<h3>7.2. Creación de la Instancia de Replicación DMS</h3>
+<ol>
+<li><p>En la página de DMS, selecciona Replication instances y luego Create replication instance.</p>
+</li>
+<li><p>Name y Description: Especifica un nombre y descripción.</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura7.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol>
+<li><p>Instance class: Elige la clase de instancia dms.t3.small.</p>
+</li>
+<li><p>Engine version: Selecciona la versión 3.5.3 (para evitar errores con los motores de BD)</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/dms.t3.small.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="5">
+<li><p>VPC: Elige Lab-VPC.</p>
+</li>
+<li><p>Publicly accessible: Habilita esta opción.</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura9.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="7">
+<li><p>High Availability: Si es obligatorio, selecciona Dev or Test Single AZ.</p>
+</li>
+<li><p>Replication subnet group: Selecciona el grupo de subredes creado (dms-subnetgroup).</p>
+</li>
+<li><p>Availability zone: No preference, si es obligatorio elige cualquiera.</p>
+</li>
+<li><p>VPC security group(s): Selecciona el Security Group creado anteriormente y quita el default.</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/grupo de seguridad dms.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="11">
+<li>Indica una etiqueta (altamente recomendable) y crea la instancia DMS.</li>
+</ol>
+<h2>8. Creación de Endpoints en DMS</h2>
+<h3>8.1. Endpoint 1: Origen (SQL Server en RDS)</h3>
+<ol>
+<li><p>En DMS, ve a Endpoints y haz clic en Create endpoint.</p>
+</li>
+<li><p>Endpoint type: Selecciona Source endpoint.</p>
+</li>
+<li><p>Endpoint identifier: lab-ep1 (o el nombre que prefieras).</p>
+</li>
+<li><p>Source engine: Microsoft SQL Server.</p>
+</li>
+<li><p>Marca la casilla Select RDS DB Instance y elige tu instancia RDS.</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura11.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="6">
+<li>Access to endpoint database: Selecciona Provide access information manually.</li>
+</ol>
+<ul>
+<li>Server name: Debería llenarse automáticamente con el endpoint de la RDS. Si no, ingrésalo manualmente.</li>
+<li>Port: 1433</li>
+<li>User name: admin</li>
+<li>Password: #LabDBase3!</li>
+<li>Database name: UniversityDB</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/Captura12.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="7">
+<li>Test endpoint connection:</li>
+</ol>
+<ul>
+<li>Selecciona tu instancia de replicación DMS.</li>
+<li>Haz clic en Run test. Verifica que la conexión sea exitosa.</li>
+</ul>
+<ol start="8">
+<li>Crea el endpoint.</li>
+</ol>
+<h2>9. Creación de Roles de IAM para AWS Redshift</h2>
+<ol>
+<li><p>Ve al servicio IAM en la AWS Management Console.</p>
+</li>
+<li><p>En el panel de navegación, selecciona Roles y haz clic en Create role.</p>
+</li>
+<li><p>Select trusted entity: Elige AWS service.</p>
+</li>
+<li><p>Use case: Selecciona Redshift.</p>
+</li>
+<li><p>Use case for Redshift: Selecciona Redshift - Customizable y haz clic en Next.</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura13.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="6">
+<li>Add permissions: Busca y selecciona las políticas AmazonS3ReadOnlyAccess, AmazonDMSRedshiftS3Role, AmazonDMSVPCManagementRole, AmazonS3FullAccess, AWSMigrationHubDMSAccess. Haz clic en Next.</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura14.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="7">
+<li>Role details:</li>
+</ol>
+<ul>
+<li>Role name: myRedshiftRole</li>
+<li>Description: Deja la descripción automática o modifícala.
+<img src="./Workshop M&amp;O_files/Captura15.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></li>
+</ul>
+<ol start="8">
+<li><p>Añade etiquetas (altamente recomendado) y haz clic en Create role.</p>
+</li>
+<li><h4>Repite el mismo proceso pero con el servicio de DMS, pero solo le asociarás la política "AmazonDMSRedshiftS3Role"</h4>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura16.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<h2>10. Configuración de AWS Redshift</h2>
+<p>Busca Redshift en la AWS Management Console.</p>
+<h3>10.1. Creación del Cluster Subnet Group en Redshift</h3>
+<ol>
+<li><p>En el menú de la izquierda de Redshift, bajo Configurations, selecciona Subnet groups.</p>
+</li>
+<li><p>Haz clic en Create cluster subnet group.</p>
+</li>
+<li><p>Name: Deja el nombre por defecto o especifica uno (ej: redshift-lab-subnetgroup).</p>
+</li>
+<li><p>Description: lab subnet group.</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura17.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="5">
+<li><p>VPC: Elige la Lab-VPC.</p>
+</li>
+<li><p>Subnets: Haz clic en Add all the subnets for this VPC.</p>
+</li>
+<li><p>Selecciona las subredes deseadas.</p>
+</li>
+<li><p>Crea el grupo de subredes.</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura18.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<h3>10.2. Creación del Cluster de Redshift</h3>
+<ol>
+<li><p>En la página de Redshift, haz clic en Create cluster.</p>
+</li>
+<li><p>Cluster configuration:</p>
+</li>
+</ol>
+<ul>
+<li>Cluster identifier: lab-cluster.</li>
+</ul>
+<ol start="3">
+<li>Nodes:</li>
+</ol>
+<ul>
+<li>Elige la opción I'll choose</li>
+<li>Node type: ra3.large</li>
+<li>Number of nodes: 1</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/captura cluster nuevo redshift.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="4">
+<li>Load sample data: Marca esta opción.</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura20.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="5">
+<li>Database configurations:</li>
+</ol>
+<ul>
+<li><p>Admin user name: awsuser</p>
+</li>
+<li><p>Admin user password: Selecciona Manually add the admin password (o "Manual password") y pon la contraseña: #LabDBase3!</p>
+</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/Captura21.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="6">
+<li>Network and security:</li>
+</ol>
+<ul>
+<li><p>Virtual private cloud (VPC): Elige Lab-VPC.</p>
+</li>
+<li><h4>VPC security groups: Elige el security group para Redshift (puede aparecer un nombre como StackSet, pero este contendra la palabra "Redshift", si no aparece tendras que crearlo).</h4>
+</li>
+<li><p>Cluster subnet group: Elige el grupo de subredes de cluster que creaste antes.</p>
+</li>
+<li><p>Publicly accessible: Activa esta opción (Turn on).</p>
+</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/Captura22.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol>
+<li>Cluster Permissions:</li>
+</ol>
+<p>En esta parte bajas a donde sale Associated IAM roles, y seleccionas en Actions la opción para asociar los roles de IAM que hemos creado para nuestro Cluster.</p>
+<h4>Si sólo aparece el rol "myRedshiftRole", no te preocupes con asociar ese en específico ya vas en el camino. (igual si no sale ninguno puedes levantar el Cluster y luego asociarlo)</h4>
+<p><img src="./Workshop M&amp;O_files/Captura23.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<p><img src="./Workshop M&amp;O_files/Captura24.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<p><img src="./Workshop M&amp;O_files/Captura25.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="8">
+<li>Crea el cluster.</li>
+</ol>
+<h3>10.3. Asociación del Rol IAM al Cluster de Redshift (Si no lo asociaste antes de crearlo)</h3>
+<ol>
+<li><p>Una vez creado el cluster, selecciónalo en la lista.</p>
+</li>
+<li><p>Ve al menú desplegable Actions.</p>
+</li>
+<li><p>Selecciona Manage IAM roles.</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura26.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="4">
+<li><p>Debería aparecer los roles myRedshiftRole y DMSLabRole que creaste. Seleccionalos. </p>
+<h4>De nuevo, si no sale el DMSLabRole no hay problema.</h4>
+</li>
+<li><p>Haz clic en Associate IAM role.</p>
+</li>
+</ol>
+<h4>IMPORTANTE: Si en alguna fase del laboratorio hay algun error de network (específicamente en el endpoint target de DMS), deberás revisar el security group y verificar que este tenga la regla de entrada para Redshift, sí no lo está, sigue estos pasos:</h4>
+<h4>Regla de Security Group para Redshift:</h4>
+<p>Si el cluster de Redshift quedó conectado al security group default de la Lab-VPC, tendrás que añadirle una regla de entrada:</p>
+<ol>
+<li><p>Ve al Security Group asignado al cluster.</p>
+</li>
+<li><p>Selecciona la pestaña Inbound rules.</p>
+</li>
+<li><p>Haz clic en Edit inbound rules.</p>
+</li>
+<li><p>Haz clic en Add rule.</p>
+</li>
+<li><p>Configura la regla:</p>
+</li>
+</ol>
+<ul>
+<li>Type: Redshift.</li>
+<li>Protocol: TCP (automático).</li>
+<li>Port range: 5439 (automático).</li>
+<li>Source: 0.0.0.0/0.</li>
+</ul>
+<ol start="6">
+<li>Guarda las reglas.</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura27.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<h2>11. Creación del Endpoint 2 en DMS: Destino (Redshift)</h2>
+<ol>
+<li><p>Vuelve a DMS en la AWS Management Console.</p>
+</li>
+<li><p>Ve a Endpoints y haz clic en Create endpoint.</p>
+</li>
+<li><p>Endpoint type: Selecciona Target endpoint.</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura28.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="4">
+<li><p>Endpoint identifier: lab-ep2 (o el nombre que prefieras).</p>
+</li>
+<li><p>Target engine: Amazon Redshift.</p>
+</li>
+<li><p>Marca la casilla Select Redshift cluster y elige tu cluster lab-cluster.</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura29.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="7">
+<li>Access to endpoint database: Selecciona Provide access information manually.</li>
+</ol>
+<ul>
+<li>Server name: Debería llenarse automáticamente con el endpoint del cluster de Redshift. Si no, ingrésalo manualmente.</li>
+<li>Port: 5439</li>
+<li>User name: awsuser</li>
+<li>Password: #LabDBase3!</li>
+<li>Database name: dev (esta es la base de datos por defecto que se crea en Redshift).</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/Captura30.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="8">
+<li>Test endpoint connection:</li>
+</ol>
+<ul>
+<li>Selecciona tu instancia de replicación DMS.</li>
+<li>Haz clic en Run test. Verifica que la conexión sea exitosa. (Si falla por error de red, verifica la regla del Security Group del cluster de Redshift).</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/Captura31.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="9">
+<li>Crea el endpoint.</li>
+</ol>
+<p>(si sale failed por network error, es por que el security group del cluster no tiene el inbound rule de Redshift:5439)</p>
+<p>(en caso de no resolverse el error de conexión entre el endpoint y redshift, ve al cluster, luego a modify, y vuelve a poner la contraseña de awsuser. Sí no, mira de nuevo en modify y ajusta el servername de forma que termine en ...amazonaws.com, y no en ...amazonaws.com:5439/dev)</p>
+<h2>12. Creación de la Tarea de Migración de Base de Datos en DMS</h2>
+<ol>
+<li><p>En la página de DMS, ve a la sección Database migration tasks.</p>
+</li>
+<li><p>Haz clic en el botón Create task.</p>
+</li>
+</ol>
+<h3>12.1. Configuración de la Tarea</h3>
+<ul>
+<li>Task identifier: lab-task (o el nombre que prefieras).</li>
+<li>Replication instance: Selecciona la instancia DMS ya creada.</li>
+<li>Source database endpoint: Elige tu endpoint de origen (lab-ep1 - RDS SQL Server).</li>
+<li>Target database endpoint: Elige tu endpoint de destino (lab-ep2 - Redshift).</li>
+<li>Migration type: Deja seleccionada la opción Migrate existing data (Migrar datos existentes).</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/Captura32.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<h3>12.2. Mapeo de Tablas (Table Mappings)</h3>
+<ol>
+<li><p>Baja hasta la sección Table mappings.</p>
+</li>
+<li><p>Expande Selection rules y haz clic en Add new selection rule.</p>
+</li>
+<li><p>Configura la regla de selección:</p>
+</li>
+</ol>
+<ul>
+<li>Schema: Elige Enter a schema.</li>
+<li>Source name (Schema name): dbo</li>
+<li>Table name: Deja el predeterminado: % (para incluir todas las tablas del esquema dbo).</li>
+<li>Action: Include.</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/Captura33.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<h3>12.3. Evaluación Previa a la Migración (Premigration Assessment)</h3>
+<ul>
+<li>Asegúrate de que la opción Turn on premigration assessment (o similar) NO esté activada, a menos que se indique lo contrario para el laboratorio.</li>
+</ul>
+<h3>12.4. Creación de la Tarea</h3>
+<ul>
+<li>Finalmente, haz clic en Create task.</li>
+</ul>
+<h2>13. Monitoreo del Estado de la Tarea</h2>
+<p>Espera y monitorea los estados de la tarea de migración. Debería pasar por los siguientes estados:</p>
+<ol>
+<li><p>Creating</p>
+</li>
+<li><p>Starting</p>
+</li>
+<li><p>Running (o Full load in progress)</p>
+</li>
+<li><p>Finalmente, Load complete.</p>
+</li>
+</ol>
+<h2>14. Verificación de Tablas Migradas en la Tarea</h2>
+<p>Dentro de los detalles de la tarea de migración completada (en la pestaña Table statistics o similar), verifica que la tabla se haya migrado:</p>
+<h4>Debería aparecer una tabla con:</h4>
+<ul>
+<li>Schema: dbo</li>
+<li>Table name: UniversityScores (o el nombre de tu tabla)</li>
+<li>Load state: Table completed (o similar)</li>
+<li>Se deberían mostrar estadísticas de las filas cargadas.</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/Captura34.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<h2>15. Validación de la Migración en AWS Redshift</h2>
+<ol>
+<li><p>Ve al servicio Redshift en la AWS Management Console.</p>
+</li>
+<li><p>Selecciona tu cluster (lab-cluster).</p>
+</li>
+<li><p>Haz clic en Query data y luego elige Query editor (o la versión del editor de consultas disponible).</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura35.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ol start="4">
+<li>Si es la primera vez o necesitas configurar la conexión:</li>
+</ol>
+<ul>
+<li><p>Haz clic en Create connection (o configura la conexión existente)</p>
+</li>
+<li><p>Authentication: Temporary credentials o Database user name and password</p>
+</li>
+<li><p>Cluster: Selecciona tu cluster lab-cluster</p>
+</li>
+<li><p>Database name: dev</p>
+</li>
+<li><p>Database user: awsuser</p>
+</li>
+<li><p>(Ingresa la contraseña que asignamos en el lab)</p>
+</li>
+<li><p>Conéctate.</p>
+</li>
+</ul>
+<ol start="5">
+<li>Ejecuta una consulta de prueba para visualizar que todas las columnas de la tabla se migraron:</li>
+</ol>
+<pre><code class="language-bash">SELECT * FROM dbo.UniversityScores LIMIT 10;
+</code></pre>
+<ol start="6">
+<li>Ejecuta la consulta. Deberías ver los datos de la tabla UniversityScores.</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura36.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<h2>16. Notas Finales (por si hay dudas)</h2>
+<p>Dentro del cluster en Redshift se utilizó los siguientes roles: </p>
+<ul>
+<li>El rol dms-access-for-endpoint:</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/Captura37.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<ul>
+<li>En myRedshiftRole:</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/Captura38.png" alt="Logo de Mi Proyecto" style="cursor: zoom-in;"></p>
+<p>Recuerda que añadir etiquetas a cada recurso que levantes, hace parte de las buenas prácticas que recomienda AWS.</p>
+<h1>¡Felicidades!</h1>
+<p>Ha completado el laboratorio de migración de datos con AWS DMS.</p>
+<p><img src="./Workshop M&amp;O_files/LabDMSFinalArch.png" alt="image" style="cursor: zoom-in;"></p>
+</div></main>
+            </div>
+
+            <div id="start-lab-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeStartLabModal()">×</span>
+      <h2>Confirmar Acceso al Laboratorio</h2>
+      <div class="confirmation-message">
+        <p>Bienvenido <strong>Christhian Rodriguez</strong> al Laboratorio 2</p>
+        <p>Ingresarás con el correo: <strong>christhian057@gmail.com</strong></p>
+        <p>Entorno de trabajo: <strong>Workshop Migration DE</strong></p>
+      </div>
+      <div class="modal-actions">
+        <button id="confirm-lab-button" class="submit-button" onclick="startLab()">Enviar Solicitud</button>
+        <pre class="error-message">¡Éxito! Redirigiendo a AWS...</pre>
+      </div>
+    </div>
+  </div>
+        </div>
+
+        <script src="./Workshop M&amp;O_files/marked.min.js"></script>
+        <script src="./Workshop M&amp;O_files/script.js"></script>
+    </div>
+
+<protonpass-root-2fa1 data-protonpass-role="root" data-protonpass-theme="os"><template shadowrootmode="closed"></template></protonpass-root-2fa1></body></html>

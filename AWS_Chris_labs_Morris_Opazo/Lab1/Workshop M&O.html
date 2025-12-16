@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<!-- saved from url=(0026)https://workshop-mo.click/ -->
+<html lang="es" data-lt-installed="true"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop M&amp;O</title>
+    <link rel="stylesheet" href="./Workshop M&amp;O_files/style.css">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/sebasshb/stibaquira-elabs2025rlanda/refs/heads/main/public/favicon.ico">
+</head>
+<body style="">
+    <div class="background-container">
+        <div class="background-glow"></div>
+        <div id="login-modal" class="modal hidden">
+            <img src="./Workshop M&amp;O_files/LogoMYO.png" alt="Logo Workshop" class="login-logo">
+            <div class="modal-content">
+                <h2>Iniciar Sesión</h2>
+                <form id="login-form">
+                    <label for="username">Email o UserID:</label>
+                    <input type="text" id="username" name="username" required="" style="">
+                    
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" required="">
+                    
+                    <button type="submit" class="submit-button">Ingresar</button>
+                </form>
+                <p id="login-error" class="error-message"></p>
+            </div>
+        </div>
+
+        <div id="app-content" class="">
+            <div class="container">
+                <nav class="sidebar">
+                    <img src="./Workshop M&amp;O_files/LogoMYO.png" alt="Logo" class="sidebar-logo">
+                    
+                    <h2>Laboratorios</h2>
+                    <button onclick="loadLabContent(&#39;lab1.md&#39;)" class="lab-button">Lab 1</button>
+                    <button onclick="loadLabContent(&#39;lab2.md&#39;)" class="lab-button">Lab 2</button>
+                    <button onclick="loadLabContent(&#39;lab3.md&#39;)" class="lab-button">Lab 3</button>
+                    <button onclick="loadLabContent(&#39;lab4.md&#39;)" class="lab-button">Lab 4</button>
+                    <button onclick="logout()" class="logout-button">Cerrar Sesión</button>
+                    <p id="user-display" class="user-info">Sesión iniciada como:<br><strong>Christhian Rodriguez</strong></p>
+                    <img src="./Workshop M&amp;O_files/mario1.gif" alt="Mario 8-bit" class="mario-sidebar-gif">
+                </nav>
+
+                <main class="content" id="content-area">
+    <div class="audio-player-container">
+      <div class="audio-player-container-inner">
+        <h3>Escucha la guía del laboratorio 🎧</h3>
+        <audio controls="" src="lab1.wav"></audio>
+        <button class="start-lab-button" onclick="openStartLabModal(&#39;lab1.md&#39;)">Start Lab</button>
+      </div>
+    </div>
+  <div class="md-body"><h1>Laboratorio: Crear una Instancia RDS</h1>
+<p>En este laboratorio se le proporcionará un entorno en el cual ya está levantada una VPC completa (subnets, route table, internet gateway).
+Su objetivo es crear una Instancia RDS a partir de la VPC proporcionada, la creación del security group para la RDS, y el RDS Subnet Group
+necesario para la creación de la misma.</p>
+<p><img src="./Workshop M&amp;O_files/LabRDSArch.png" alt="image" style="cursor: zoom-in;"></p>
+<h2>Creación del Security Group para RDS</h2>
+<p>Antes de proceder, tenemos que crear un security group para que se pueda acceder a la RDS
+por medio del Puerto 1433.</p>
+<ol>
+<li><p>Dirígete a VPC en la consola de AWS.</p>
+</li>
+<li><p>En el menú izquierdo, entra a la sección de "Security Groups".</p>
+</li>
+<li><p>Haz clic en "Crear grupo de seguridad".</p>
+</li>
+<li><p>Configura los siguientes campos:</p>
+<ul>
+<li>Nombre del grupo de seguridad: RDS-SecurityGroup</li>
+<li>Descripción: (Puedes dejarla en blanco)</li>
+<li>VPC: Elige Lab-VPC.</li>
+</ul>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura001.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="5">
+<li><p>Baja a la sección de "Reglas de entrada" (Inbound Rules) y crea dos reglas:</p>
+<ul>
+<li>Regla 1:<ul>
+<li>Tipo: Todo el tráfico</li>
+<li>Origen: 0.0.0.0/0</li>
+</ul>
+</li>
+<li>Regla 1:<ul>
+<li>Tipo: MSSQL</li>
+<li>Protocolo: TCP</li>
+<li>Rango de puertos: 1433 (se pondrá automáticamente)</li>
+<li>Origen: 0.0.0.0/0</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Finalmente, haz clic en "Crear grupo de seguridad".</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura002.png" alt="image" style="cursor: zoom-in;"></p>
+<h2>Creación del Subnet Group para RDS</h2>
+<p>Ahora procedemos a crear un Subnet Group para la Instancia RDS que vamos a desplegar.</p>
+<ol>
+<li><p>En la consola de AWS, busca RDS y selecciona "Aurora and RDS".</p>
+</li>
+<li><p>En el menú izquierdo, en la parte de abajo, elige la opción "Subnet Groups".</p>
+</li>
+<li><p>Haz clic en la opción "Create DB Subnet Group".</p>
+</li>
+<li><p>Configura los siguientes campos:</p>
+<ul>
+<li>Name: RDS-SubnetGroup</li>
+<li>Description: (Opcional pero recomendable)</li>
+<li>VPC: Elige Lab-VPC.</li>
+</ul>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura01.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="5">
+<li><p>En la sección "Add Subnets":</p>
+<ul>
+<li>Availability Zones: Elige us-east-1a y us-east-1b.</li>
+<li>Subnets: Elige tus dos subnets correspondientes a las zonas de disponibilidad seleccionadas.</li>
+</ul>
+</li>
+<li><p>Finalmente, haz clic en "Create".</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura02.png" alt="image" style="cursor: zoom-in;"></p>
+<h2>Creación de la Instancia RDS</h2>
+<ol>
+<li>En la consola de AWS, ve al buscador y escribe RDS. Selecciona la opción "Aurora and RDS".</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura1.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="2">
+<li>En la sección de "Aurora and RDS", en el menú izquierdo selecciona "Databases" y después haz clic en "Create Database".</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura2.png" alt="image" style="cursor: zoom-in;"></p>
+<p><img src="./Workshop M&amp;O_files/Captura3.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="3">
+<li><p>En la configuración de la base de datos:</p>
+<ul>
+<li>Choose a database creation method: Selecciona Standard create.</li>
+<li>Engine type: Selecciona Microsoft SQL Server.</li>
+<li>Database management type: Deja Amazon RDS tal cual como está.</li>
+</ul>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura4.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="4">
+<li><p>Edition: Déjala por defecto en SQL Server Express Edition.</p>
+</li>
+<li><p>Engine Version: Déjala por defecto.</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura5.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="6">
+<li>Templates: Elige Free Tier para este laboratorio.</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura6.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="7">
+<li><p>Settings:</p>
+<ul>
+<li>DB instance identifier: lab-database</li>
+<li>Master username: Deja admin.</li>
+<li>Credentials Management: Pon Self Managed.</li>
+<li>Master password: #LabDBase3! (Confirma la contraseña)</li>
+</ul>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura7.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="8">
+<li><p>Instance configuration:</p>
+<ul>
+<li>DB instance class: Deja db.t3.micro.</li>
+<li>Storage type: Deja General Purpose SSD (gp2) (lo que te pone por default).</li>
+</ul>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura8.png" alt="image" style="cursor: zoom-in;"></p>
+<ol>
+<li><p>Connectivity:</p>
+<ul>
+<li>Compute resource: Deja la opción Don't connect to an EC2 compute resource.</li>
+<li>Virtual private cloud (VPC): Pon tu Lab-VPC.</li>
+<li>DB Subnet Group: Deja la que creamos antes (RDS-SubnetGroup).</li>
+<li>Public access: Habilita la opción (Yes).</li>
+<li>VPC security group (firewall): Elige Choose existing y selecciona el RDS-SecurityGroup que creamos.</li>
+</ul>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura9.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="10">
+<li>Availability Zone: Es importante que en este laboratorio dejes la Availability Zone en us-east-1b.</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura10.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="11">
+<li>Baja y haz clic en "Create database".</li>
+</ol>
+<h2>Verifica la creación de la RDS Instance</h2>
+<ol>
+<li>Si aparece un pop-up, haz clic en "Close".</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura11.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="2">
+<li>Verás que tu instancia RDS está creándose.</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura12.png" alt="image" style="cursor: zoom-in;"></p>
+<ol start="3">
+<li><p>La instancia tardará unos minutos en crearse y estar en estado disponible. En Status saldrá Available cuando se haya creado satisfactoriamente.</p>
+</li>
+<li><p>En los detalles de la RDS, puedes verificar tu Endpoint para conectarte a la misma posteriormente. También verás a qué VPC está asociada con su subnet group y security group.</p>
+</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/Captura13.png" alt="image" style="cursor: zoom-in;"></p>
+<h1>¡Felicidades!</h1>
+<p>Ha completado el laboratorio satisfactoriamente.</p>
+<p><img src="./Workshop M&amp;O_files/LabRDSFinalArch.png" alt="image" style="cursor: zoom-in;"></p>
+</div></main>
+            </div>
+
+            <div id="start-lab-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeStartLabModal()">×</span>
+      <h2>Confirmar Acceso al Laboratorio</h2>
+      <div class="confirmation-message">
+        <p>Bienvenido <strong>Christhian Rodriguez</strong> al Laboratorio 1</p>
+        <p>Ingresarás con el correo: <strong>christhian057@gmail.com</strong></p>
+        <p>Entorno de trabajo: <strong>Workshop RDS DE</strong></p>
+      </div>
+      <div class="modal-actions">
+        <button id="confirm-lab-button" class="submit-button" onclick="startLab()">Enviar Solicitud</button>
+        <pre class="error-message">¡Éxito! Redirigiendo a AWS...</pre>
+      </div>
+    </div>
+  </div>
+        </div>
+
+        <script src="./Workshop M&amp;O_files/marked.min.js"></script>
+        <script src="./Workshop M&amp;O_files/script.js"></script>
+    </div>
+
+<protonpass-root-2a4e data-protonpass-role="root" data-protonpass-theme="os"><template shadowrootmode="closed"></template></protonpass-root-2a4e></body></html>

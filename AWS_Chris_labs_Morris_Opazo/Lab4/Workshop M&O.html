@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<!-- saved from url=(0026)https://workshop-mo.click/ -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop M&amp;O</title>
+    <link rel="stylesheet" href="./Workshop M&amp;O_files/style.css">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/sebasshb/stibaquira-elabs2025rlanda/refs/heads/main/public/favicon.ico">
+</head>
+<body style="">
+    <div class="background-container">
+        <div class="background-glow"></div>
+        <div id="login-modal" class="modal hidden">
+            <img src="./Workshop M&amp;O_files/LogoMYO.png" alt="Logo Workshop" class="login-logo">
+            <div class="modal-content">
+                <h2>Iniciar Sesión</h2>
+                <form id="login-form">
+                    <label for="username">Email o UserID:</label>
+                    <input type="text" id="username" name="username" required="">
+                    
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" required="">
+                    
+                    <button type="submit" class="submit-button">Ingresar</button>
+                </form>
+                <p id="login-error" class="error-message"></p>
+            </div>
+        </div>
+
+        <div id="app-content" class="">
+            <div class="container">
+                <nav class="sidebar">
+                    <img src="./Workshop M&amp;O_files/LogoMYO.png" alt="Logo" class="sidebar-logo">
+                    
+                    <h2>Laboratorios</h2>
+                    <button onclick="loadLabContent(&#39;lab1.md&#39;)" class="lab-button">Lab 1</button>
+                    <button onclick="loadLabContent(&#39;lab2.md&#39;)" class="lab-button">Lab 2</button>
+                    <button onclick="loadLabContent(&#39;lab3.md&#39;)" class="lab-button">Lab 3</button>
+                    <button onclick="loadLabContent(&#39;lab4.md&#39;)" class="lab-button">Lab 4</button>
+                    <button onclick="logout()" class="logout-button">Cerrar Sesión</button>
+                    <p id="user-display" class="user-info">Sesión iniciada como:<br><strong>Christhian Rodriguez</strong></p>
+                    <img src="./Workshop M&amp;O_files/mario1.gif" alt="Mario 8-bit" class="mario-sidebar-gif">
+                </nav>
+
+                <main class="content" id="content-area">
+    <div class="audio-player-container">
+      <div class="audio-player-container-inner">
+        <h3>Escucha la guía del laboratorio 🎧</h3>
+        <audio controls="" src="lab4.wav"></audio>
+        <button class="start-lab-button" onclick="openStartLabModal(&#39;lab4.md&#39;)">Start Lab</button>
+      </div>
+    </div>
+  <div class="md-body"><h1>Laboratorio Athena Quest</h1>
+<p><a href="https://workshopde-videos-lab.s3.us-east-1.amazonaws.com/lab_athena.mp4">Ver vídeo guía</a></p>
+<p><strong>Objetivo General:</strong>  Aprender a usar los servicios de almacenamiento y análisis de datos en AWS, ya sea Amazon S3 y Amazon Athena para guardar datos y realizar consultas SQL que permitan explorar y analizar información.</p>
+<p><strong>Introducción:</strong>  S3 es un servicio de almacenamiento que permite guardar objetos de forma segura y escalable. La información se organiza en buckets y cada uno debe tener un nombre único a nivel global, es decir, no puede repetirse en ninguna otra cuenta de AWS del mundo. Además, por seguridad los buckets deben estar configurados para bloquear el acceso público. Esto evita que los datos sean visibles para cualquier persona y protege la privacidad de la información. </p>
+<p>Athena es un servicio de consulta que permite analizar datos directamente desde Amazon S3 usando SQL. No requiere configurar ni administrar servidores, lo que facilita hacer consultas rápidas y flexibles. Athena es ideal para explorar grandes cantidades de datos almacenados en formato CSV, JSON, Parquet, entre otros. </p>
+<p>Cada vez que ejecutas una consulta en Athena, los resultados deben almacenarse en algún lugar, y por defecto, Athena los guarda en un bucket S3. Este paso es obligatorio porque Athena necesita escribirlos en un archivo que puedas revisar, descargar o reutilizar más adelante. Es por eso que en este laboratorio debes crear dos buckets S3 uno para los datos de origen que vas a consultar y otro para los resultados de las consultas que ejecutes con Athena.</p>
+<p><img src="./Workshop M&amp;O_files/Arquitectura Athena.png" alt="S3" style="cursor: zoom-in;"></p>
+<p><strong>Tarea 1: Extraer los datos para el trabajo del laboratorio</strong></p>
+<ul>
+<li>Debes descargar los datos books.csv con temática de libros: <a href="https://workshop-mo.s3.us-east-1.amazonaws.com/libros_laboratorio.csv">Link de descarga</a></li>
+</ul>
+<p><strong>Tarea 2: Crear un bucket S3 para los datos del Laboratorio</strong></p>
+<ul>
+<li>Debes ir a S3 y crear un nuevo bucket S3. Solo debes insertar un nombre para tu bucket, los demás valores debes dejarlos tal cual</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/athena (16).jpg" alt="S3" style="cursor: zoom-in;"></p>
+<p><strong>Tarea 2.1: Debes cargar tus datos al bucket recién creado</strong></p>
+<ul>
+<li>Tienes que abrir el bucket creado y seleccionar “Cargar”. Luego, "Agregar Archivos" para subir tu archivo con los datos</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/athena (1).jpg" alt="S3" style="cursor: zoom-in;"></p>
+<p><img src="./Workshop M&amp;O_files/athena (4).jpg" alt="S3" style="cursor: zoom-in;"></p>
+<p><strong>Tarea 3: Crear un bucket para guardar los resultados de las consultas de Athena</strong></p>
+<ul>
+<li>Crea un nuevo bucket en S3, igual al que generaste en la tarea 2 en que solo lo nombraste y los demás valores los dejaste tal cual. Este bucket será utilizado exclusivamente para almacenar los resultados de las consultas de Athena</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/Captura de pantalla 2025-07-17 215631.png" alt="S3" style="cursor: zoom-in;"> </p>
+<p><strong>Tarea 4: Configurar la ubicación de los resultados de las consultas en Athena</strong></p>
+<ul>
+<li><p>Debes ir a Athena y seleccionar la opción “Iniciar el editor de consultas”, asegurándote de que esté seleccionada la opción “Consulte sus datos con Trino SQL”.
+Trino SQL te permite consultar datos almacenados en S3 usando sentencias SQL, de manera rápida y sin necesidad de configurar servidores.</p>
+</li>
+<li><p>Antes de crear la tabla, es necesario configurar la ubicación de los resultados de las consultas en S3. Para ello, deberás vincular esta configuración con el bucket que creaste en la tarea 3 (el dedicado exclusivamente a resultados de Athena).</p>
+</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/athena (5).jpg" alt="S3" style="cursor: zoom-in;"> </p>
+<p><img src="./Workshop M&amp;O_files/athena (6).jpg" alt="S3" style="cursor: zoom-in;"> </p>
+<p><strong>Tarea 5: Crear tabla en Athena</strong></p>
+<ul>
+<li>Para crear una tabla en Athena, primero selecciona la opción “Datos del bucket S3”, lo que indica que la tabla se construirá a partir de los datos almacenados en ese bucket. A continuación, debes asignar un nombre a la tabla y luego seleccionar “Crear una base de datos” para nombrarla también. Mantén todos los demás campos y configuraciones tal como están por defecto</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/athena (10).jpg" alt="S3" style="cursor: zoom-in;"></p>
+<ul>
+<li>Luego, debes seleccionar el conjunto de datos y elegir el bucket de S3 donde previamente guardaste el archivo CSV que contiene la información para la tabla</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/athena (11).jpg" alt="S3" style="cursor: zoom-in;"></p>
+<ul>
+<li>Ahora, en el tipo de tabla, deja la opción por defecto que es “Apache Hive”, pero cambia el formato de archivo a CSV.
+El resto de las configuraciones deben mantenerse por defecto, sin realizar ningún cambio</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/athena (12).jpg" alt="S3" style="cursor: zoom-in;"></p>
+<ul>
+<li>En los detalles de la tabla, debes nombrar todas las columnas correspondientes a los datos. Puedes agregarlas una por una o seleccionar la opción “Agregar columnas en bloque”, donde podrás ingresar todas las columnas de forma rápida usando el formato:
+&lt;“nombre” tipo, “nombre” tipo, ...&gt;
+Por ejemplo, en este caso deberás escribir:
+autor string, libro string, year int</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/athena (13).jpg" alt="S3" style="cursor: zoom-in;"></p>
+<ul>
+<li>Finalmente, podrás ver la vista previa de la consulta. Para concluir el proceso, simplemente selecciona “Crear tabla”</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/athena (14).jpg" alt="S3" style="cursor: zoom-in;"></p>
+<p><strong>Tarea 6: Realizar consultas de tipo SQL en Athena</strong></p>
+<ul>
+<li>Antes de comenzar a realizar las consultas SQL, debes asegurarte de tener seleccionada la base de datos y la tabla correspondientes. Esto garantiza que las consultas se ejecuten sobre la tabla correcta</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/athena (15).jpg" alt="S3" style="cursor: zoom-in;"></p>
+<ul>
+<li><p>Ya configurado lo anterior puedes comenzar a realizar consultas SQL y responder a las siguientes preguntas:</p>
+<p><strong>1.¿Cuáles son todos los libros en la base de datos?</strong> </p>
+<p><em>Respuesta:</em></p>
+<p>SELECT * FROM tablalibros;</p>
+</li>
+</ul>
+<p><img src="./Workshop M&amp;O_files/Captura de pantalla 2025-07-17 233322.png" alt="S3" style="cursor: zoom-in;"></p>
+<p><img src="./Workshop M&amp;O_files/Captura de pantalla 2025-07-17 233952.png" alt="S3" style="cursor: zoom-in;"></p>
+<p>  <strong>2. ¿Qué libros escribió “Dean Koontz”?</strong></p>
+<p>  <em>Respuesta:</em></p>
+<p>  SELECT * </p>
+<p>  FROM tablalibros</p>
+<p>  WHERE autor = 'Dean Koontz';</p>
+<p>  <strong>3.¿Qué libros fueron publicados después del año 2000?</strong></p>
+<p>   <em>Respuesta:</em></p>
+<p>  SELECT * </p>
+<p>  FROM tablalibros</p>
+<p>  WHERE year &gt; 2000;</p>
+<p>  <strong>4. ¿Cuáles son todos los autores únicos que hay en la base de datos?</strong></p>
+<p>   <em>Respuesta:</em></p>
+<p>  SELECT DISTINCT autor </p>
+<p>  FROM tablalibros;</p>
+<p>  <strong>5. ¿Cuáles son los libros ordenados desde el más antiguo al más reciente?</strong></p>
+<p>  <em>Respuesta:</em></p>
+<p>  SELECT * </p>
+<p>  FROM tablalibros</p>
+<p>  ORDER BY year ASC;</p>
+<p>  <strong>6. ¿Qué libros fueron publicados en el año 1999?</strong></p>
+<p>   <em>Respuesta:</em></p>
+<p>  SELECT libro, year</p>
+<p>  FROM tablalibros</p>
+<p>  WHERE year = 1999;</p>
+<p><em>Comentario adicional</em>: Para eliminar una tabla en SQL se utiliza el comando DROP TABLE nombre_tabla, mientras que para eliminar una base de datos se usa DROP DATABASE nombre_base_de_datos. Es importante tener en cuenta que, antes de eliminar una base de datos, se deben eliminar todas las tablas que contiene. De lo contrario, se generará un error.</p>
+<p><strong>¡Felicidades, has completado el laboratorio!</strong></p>
+</div></main>
+            </div>
+
+            <div id="start-lab-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-button" onclick="closeStartLabModal()">×</span>
+      <h2>Confirmar Acceso al Laboratorio</h2>
+      <div class="confirmation-message">
+        <p>Bienvenido <strong>Christhian Rodriguez</strong> al Laboratorio 4</p>
+        <p>Ingresarás con el correo: <strong>christhian057@gmail.com</strong></p>
+        <p>Entorno de trabajo: <strong>Workshop Athena Creation DE</strong></p>
+      </div>
+      <div class="modal-actions">
+        <button id="confirm-lab-button" class="submit-button" onclick="startLab()">Enviar Solicitud</button>
+        <pre class="error-message">¡Éxito! Redirigiendo a AWS...</pre>
+      </div>
+    </div>
+  </div>
+        </div>
+
+        <script src="./Workshop M&amp;O_files/marked.min.js"></script>
+        <script src="./Workshop M&amp;O_files/script.js"></script>
+    </div>
+
+<deepl-input-controller translate="no"><template shadowrootmode="open"><link rel="stylesheet" href="chrome-extension://cofdbpoegempjloogbagkncekinflcnj/build/content.css"><div dir="ltr" style="visibility: initial !important;"><div class="dl-input-translation-container svelte-95aucy"><div></div></div></div></template></deepl-input-controller><protonpass-root-5bac data-protonpass-role="root" data-protonpass-theme="dark"><template shadowrootmode="closed"></template></protonpass-root-5bac></body></html>

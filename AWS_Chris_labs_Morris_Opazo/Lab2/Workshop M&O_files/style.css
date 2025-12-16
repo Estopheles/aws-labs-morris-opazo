@@ -1,0 +1,584 @@
+/*
+========================================
+--- TEMA OSCURO PRINCIPAL (VIOLET STORM) ---
+========================================
+*/
+
+/* Estilos para el background principal */
+.background-container {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    background-color: #000000;
+    overflow: hidden;
+    transition: background-color 0.5s ease;
+}
+
+.background-glow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(139, 92, 246, 0.25), transparent 70%), #000000;
+}
+
+/* Ajustes para el body */
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    color: #d1d5db;
+}
+
+/* Contenido principal de la aplicación */
+#app-content {
+    position: relative;
+    z-index: 1;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/*
+========================================
+--- ESTILOS GENERALES Y MODALES ---
+========================================
+*/
+
+.hidden {
+    display: none !important;
+}
+
+.error-message {
+    color: #dc3545;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.4s ease;
+    flex-direction: column;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+}
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.close-button {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-button:hover {
+    color: #000;
+}
+
+/* Formularios */
+form label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+form input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+form input:focus {
+    border-color: #667eea;
+    outline: none;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 25px;
+    background: linear-gradient(to right, #8b5cf6, #421e80);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.4s;
+}
+
+.submit-button:hover {
+    transform: scale(1.03);
+    background: linear-gradient(to right, #421e80, #8b5cf6);
+}
+
+.submit-button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Contenedor principal */
+.container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/*
+========================================
+--- SIDEBAR Y CONTENIDO DE LA APP ---
+========================================
+*/
+
+/* Sidebar */
+.sidebar-logo {
+    display: block;
+    max-width: 125px;
+    margin: 0 auto 25px;
+}
+
+.sidebar {
+    width: 250px;
+    background: radial-gradient(125% 125% at 50% 10%, #000000 40%, #350136 100%);
+    color: #fff;
+    padding: 20px;
+    border-right: 1px solid #350136;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.sidebar h2 {
+    text-align: center;
+    color: #ddd6fe;
+    font-size: 22px;
+}
+
+.sidebar button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    background-color: transparent;
+    border: 1px solid #350136;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: left;
+    transition: background-color 0.3s, border-color 0.3s, transform 0.2s;
+}
+
+.sidebar button:hover {
+    background-color: rgba(221, 214, 254, 0.1);
+    border-color: #ddd6fe;
+    transform: translateX(5px);
+    color: #fff;
+}
+
+.user-info {
+    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #e0e0e0;
+    padding: 0 10px;
+    font-weight: 500;
+}
+
+.logout-button {
+    margin-top: 30px !important;
+    background: linear-gradient(to right, #570b5e, #0f001b) !important;
+    border: none !important;
+}
+
+.logout-button:hover {
+    background: linear-gradient(to right, #0f001b, #570b5e) !important;
+    color: white !important;
+}
+
+/* Área de contenido */
+
+/* Estilos para los enlaces dentro del área de contenido */
+.content a {
+    color: #a78bfa; /* Un tono de púrpura claro, similar a tu tema */
+    text-decoration: underline; /* Mantiene el subrayado para que se identifiquen como enlaces */
+    transition: color 0.3s ease; /* Transición suave para el efecto hover */
+}
+
+.content a:hover {
+    color: #c4b5fd; /* Un tono aún más claro de púrpura al pasar el mouse */
+}
+
+.content {
+    flex-grow: 1;
+    padding: 12px 40px 40px; /* top reducido, laterales y bottom igual */
+    overflow-y: auto;
+    transition: padding 0.3s ease;
+}
+
+.content h1, .content h2 {
+    color: #ddd6fe;
+}
+.content h3, .content h4 {
+    color: #f9fafb;
+}
+
+.content code {
+    background-color: #2d2d2d;
+    padding: 2px 5px;
+    border-radius: 4px;
+    color: #f1f1f1;
+    font-family: "Courier New", Courier, monospace;
+}
+
+.content pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 15px;
+    border-radius: 10px;
+    overflow-x: auto;
+}
+
+.content img {
+    max-width: 55%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px;
+}
+
+.audio-player-container {
+    background-color: #111827;
+    border-left: 5px solid #421e80;
+    border-radius: 10px;
+    padding: 13px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.audio-player-container-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.audio-player-container h3 {
+    margin: 0 18px 0 0;
+    color: #ebe6ff;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.content audio {
+    width: 85%;
+    max-height: 32px;
+}
+
+.start-lab-button {
+    margin: 0;
+    align-self: flex-end;
+    /* Reducimos el padding vertical para hacerlo más delgado */
+    padding: 8px 24px; /* Anteriormente: 10px 24px; */
+    background: linear-gradient(to right, #120c20, #421e80);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s, transform 0.2s;
+    float: none;
+    white-space: nowrap; /* Añadido: Evita que el texto se divida en varias líneas */
+    display: inline-block; /* Añadido: Asegura que el white-space: nowrap funcione correctamente */
+}
+
+.start-lab-button:hover {
+    background: linear-gradient(to right, #421e80, #120c20);
+    transform: scale(1.05);
+}
+
+/*
+========================================
+--- VISTA DE LOGIN Y MODALES OSCUROS ---
+========================================
+*/
+
+.background-container.login-view .background-glow {
+    background-image: radial-gradient(
+      circle 500px at 50% 100px,
+      rgba(139, 92, 246, 0.4),
+      transparent
+    );
+    filter: blur(100px);
+}
+
+/* CAMBIO: Se agrupan los selectores para aplicar el estilo a AMBOS modales */
+.background-container.login-view #login-modal .modal-content,
+#start-lab-modal .modal-content {
+    background-color: rgba(17, 24, 39, 0.8);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* CAMBIO: Se agrupan los selectores para el texto de AMBOS modales */
+.background-container.login-view #login-modal .modal-content h2,
+.background-container.login-view #login-modal .modal-content label,
+#start-lab-modal .modal-content h2,
+#start-lab-modal .modal-content label,
+#start-lab-modal .modal-content p {
+    color: #f1f1f1;
+}
+
+/* CAMBIO: Se agrupan los selectores para los inputs de AMBOS modales */
+.background-container.login-view #login-modal .modal-content input,
+#start-lab-modal .modal-content input {
+    background-color: rgba(30, 41, 59, 0.8);
+    color: #fff;
+    border-color: rgba(139, 92, 246, 0.5);
+}
+
+.background-container.login-view #login-modal .modal-content input:focus,
+#start-lab-modal .modal-content input:focus {
+    border-color: #8b5cf6;
+}
+
+.login-logo {
+    display: block;
+    max-width: 150px;
+    margin-bottom: 30px;
+}
+
+/* CAMBIO: Estilo específico para el botón de cerrar en el modal oscuro */
+#start-lab-modal .close-button:hover {
+    color: #fff;
+}
+
+/* CAMBIO: Estilo para que el botón de submit del modal de lab coincida con el tema */
+#start-lab-modal .submit-button {
+    background: linear-gradient(to right, #421e80, #8b5cf6);
+}
+#start-lab-modal .submit-button:hover {
+    background: linear-gradient(to right, #8b5cf6, #421e80);
+}
+
+/* Barra superior del audio: título | audio | botón */
+.audio-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Opcional si quieres que se acomode en pantallas chicas sin romperse */
+    flex-wrap: wrap;
+    margin-bottom: 0px;
+  }
+  
+  .audio-bar h3 {
+    margin: 0;
+    white-space: nowrap; /* evita que el título se corte feo */
+  }
+  
+  /* El audio ocupa el espacio central, adaptándose al ancho disponible */
+  .audio-inline {
+    flex: 1 1 420px; /* crece, puede encogerse, base ~420px */
+    width: 100%;
+    min-width: 180px;  /* para que no se haga demasiado pequeño */
+  }
+  
+  /* Asegura que el botón quede al final de la fila */
+  .start-lab-button {
+    /* sin margin-left:auto; el audio se estira y lo empuja a la derecha */
+  }
+  
+
+/* ------------------- RESPONSIVE ------------------- */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: relative;
+        box-shadow: none;
+        border-bottom: 2px solid #350136;
+        border-right: none;
+    }
+
+    .sidebar button {
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    .modal-content {
+        padding: 20px;
+        max-width: 95%;
+    }
+
+    .start-lab-button {
+        float: none;
+        width: 100%;
+        margin: 20px 0 0 0;
+    }
+    .background-container {
+        min-height: auto;
+        height: auto;
+    }
+    
+    .sidebar {
+        padding: 15px;
+    }
+    
+    .sidebar button {
+        padding: 15px;
+        margin-bottom: 10px;
+    }
+    
+    .content {
+        padding: 15px;
+    }
+    
+    .modal-content {
+        width: 85%;
+        margin: 20px auto;
+    }
+    
+    .login-logo {
+        max-width: 120px;
+        margin-bottom: 20px;
+    }
+    
+    #app-content {
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .user-info {
+        font-size: 12px;
+        margin-top: 15px;
+    }
+}
+
+/* ===== Sticky audio player ===== */
+.audio-player-container {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+}
+.audio-player-container-inner {
+    backdrop-filter: blur(2px);
+}
+
+/* ===== Markdown content layout ===== */
+.md-body {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.md-body p {
+    text-align: justify;
+    line-height: 1.7;
+}
+.md-body h1, .md-body h2, .md-body h3, .md-body h4, .md-body h5, .md-body h6 {
+    text-align: center;
+}
+.md-body img {
+    display: block;
+    margin: 20px auto;
+    max-width: 70%;
+    height: auto;
+}
+
+/* ===== Lightbox styles ===== */
+.lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;                    /* flex para centrar */
+    align-items: center;              /* vertical */
+    justify-content: center;          /* horizontal */
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;                    /* por encima de .modal (100) */
+    animation: lbFadeIn 0.15s ease;
+}
+.lightbox-overlay.closing {
+    animation: lbFadeOut 0.15s ease forwards;
+}
+
+/* backdrop ocupa todo y NO desplaza a la imagen */
+.lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+}
+
+.lightbox-image {
+    display: block;                   /* evita espacios “inline” raros */
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    cursor: zoom-out;
+}
+
+@keyframes lbFadeIn { from { opacity: 0 } to { opacity: 1 } }
+@keyframes lbFadeOut { from { opacity: 1 } to { opacity: 0 } }
+
+
+/* Estilos para el GIF de Mario en la Sidebar */
+.mario-sidebar-gif {
+    display: block;
+    margin: 30px auto 10px auto;
+    max-width: 110px; /* Ajusta este valor si necesitas que sea más grande o pequeño */
+    height: auto;
+    
+    /* === AQUÍ ESTÁ EL AJUSTE CLAVE DE OPACIDAD === */
+    opacity: 0.2; /* Prueba con este valor (20% de opacidad) */
+    /* filter: brightness(2); /* Considera si aún necesitas este filtro con la transparencia */
+}
+
+/* Para dispositivos móviles (opcional, si quieres un tamaño diferente en pantallas pequeñas) */
+@media screen and (max-width: 768px) {
+    .mario-sidebar-gif {
+        max-width: 50px; 
+        margin-top: 20px;
+    }
+}

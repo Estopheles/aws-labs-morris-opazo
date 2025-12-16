@@ -1,46 +1,65 @@
 # AWS Labs - Morris & Opazo
 
-Este repositorio contiene una colección de 4 laboratorios prácticos de AWS desarrollados siguiendo las metodologías de Morris & Opazo, enfocados en servicios fundamentales de la nube.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![AWS](https://img.shields.io/badge/AWS-Cloud-orange.svg)](https://aws.amazon.com/)
+[![Labs](https://img.shields.io/badge/Labs-4-blue.svg)](#laboratorios-incluidos)
+[![Documentation](https://img.shields.io/badge/Docs-Complete-green.svg)](./docs/)
 
-## Laboratorios Incluidos
+> 🚀 **Colección de laboratorios prácticos de AWS** desarrollados siguiendo las metodologías de Morris & Opazo, enfocados en servicios fundamentales de la nube.
 
-### Lab 01: RDS Fundamentals
+## 📋 Tabla de Contenidos
 
-**Directorio:** `lab-01-rds-fundamentals/`
+- [Laboratorios Incluidos](#laboratorios-incluidos)
+- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Guía de Inicio Rápido](#guía-de-inicio-rápido)
+- [Documentación](#documentación)
+- [Contribuir](#contribuir)
+- [Licencia](#licencia)
+
+## 🧪 Laboratorios Incluidos
+
+### 🗄️ Lab 01: RDS Fundamentals
+
+**Directorio:** [`lab-01-rds-fundamentals/`](./lab-01-rds-fundamentals/)
 
 - **Objetivo:** Crear una instancia Amazon RDS (Microsoft SQL Server) dentro de una VPC
 - **Servicios:** Amazon RDS, VPC, Security Groups, Subnet Groups
 - **Destacado:** Configuración completa de red, seguridad y alta disponibilidad
 - **Duración:** ~45 minutos
+- **Nivel:** Principiante
 
-### Lab 02: DMS Migration
+### 🔄 Lab 02: DMS Migration
 
-**Directorio:** `lab-02-dms-migration/`
+**Directorio:** [`lab-02-dms-migration/`](./lab-02-dms-migration/)
 
 - **Objetivo:** Migrar datos de RDS a Amazon Redshift usando AWS DMS
 - **Servicios:** AWS DMS, Amazon Redshift, IAM Roles, CloudShell
 - **Destacado:** Migración entre motores de BD diferentes, configuración de endpoints
 - **Prerequisito:** Lab 01 completado
+- **Nivel:** Intermedio
 
-### Lab 03: Serverless Architecture
+### ⚡ Lab 03: Serverless Architecture
 
-**Directorio:** `lab-03-serverless/`
+**Directorio:** [`lab-03-serverless/`](./lab-03-serverless/)
 
 - **Objetivo:** Crear una API serverless completa para gestión de usuarios
 - **Servicios:** DynamoDB, Lambda, API Gateway
 - **Destacado:** Métodos GET/POST, validación desde navegador y CloudShell
 - **Bonus:** API adicional para gestión de libros
+- **Nivel:** Intermedio
 
-### Lab 04: Athena Quest
+### 📊 Lab 04: Athena Quest
 
-**Directorio:** `lab-04-athena-quest/`
+**Directorio:** [`lab-04-athena-quest/`](./lab-04-athena-quest/)
 
 - **Objetivo:** Análisis de datos usando S3 y Athena
 - **Servicios:** Amazon S3, Amazon Athena
 - **Destacado:** Consultas SQL sobre archivos CSV, creación de tablas
 - **Duración:** ~60 minutos
+- **Nivel:** Principiante
 
-## Tecnologías Utilizadas
+## 🛠️ Tecnologías Utilizadas
 
 - **Bases de Datos:** Amazon RDS (SQL Server), Amazon DynamoDB, Amazon Redshift
 - **Compute:** AWS Lambda
@@ -51,7 +70,7 @@ Este repositorio contiene una colección de 4 laboratorios prácticos de AWS des
 - **Networking:** VPC, Security Groups, Subnet Groups
 - **Tools:** AWS CloudShell
 
-## Estructura del Proyecto
+## 📁 Estructura del Proyecto
 
 ```
 aws-labs-morris-opazo/
@@ -65,7 +84,7 @@ aws-labs-morris-opazo/
 └── lab-04-athena-quest/               # Analytics con Athena
 ```
 
-## Cómo Usar Este Repositorio
+## 🚀 Guía de Inicio Rápido
 
 1. **Clona el repositorio**:
    
@@ -86,7 +105,7 @@ aws-labs-morris-opazo/
 
 4. **Sigue el README específico** de cada lab para instrucciones detalladas
 
-## Documentación
+## 📚 Documentación
 
 Cada laboratorio incluye:
 
@@ -101,7 +120,7 @@ Cada laboratorio incluye:
 - Reportes detallados en PDF disponibles en la carpeta `docs/`
 - Referencias a videos guía cuando están disponibles
 
-## Aprendizajes Clave
+## 🎯 Aprendizajes Clave
 
 1. **Fundamentos RDS:** Configuración de bases de datos relacionales en la nube
 2. **Migración de Datos:** Uso de DMS para migrar entre diferentes motores de BD
@@ -110,32 +129,49 @@ Cada laboratorio incluye:
 5. **Networking AWS:** Configuración de VPC, subredes y grupos de seguridad
 6. **IAM y Permisos:** Gestión de roles y políticas para servicios AWS
 
-## Casos de Uso Prácticos
+## 💼 Casos de Uso Prácticos
 
 - **Migración de aplicaciones legacy** a la nube
 - **APIs REST serverless** para aplicaciones modernas
 - **Data Lake y análisis** de grandes volúmenes de datos
 - **Arquitecturas híbridas** con diferentes servicios de AWS
 
-## Consejos Importantes
+## ⚠️ Consejos Importantes
 
 - **Región:** Todos los labs están configurados para `us-east-1`
 - **Costos:** Cada lab incluye instrucciones de cleanup para evitar costos
 - **Prerequisites:** Verificar que tienes acceso a los servicios AWS necesarios
 - **Orden:** Los Labs 01 y 02 deben realizarse secuencialmente
 
-## Autor
+## 👨‍💻 Autor
 
 **Christhian Alberto Rodríguez García**  
-Laboratorios realizados como parte del programa de capacitación AWS de Morris & Opazo
+*Laboratorios realizados como parte del programa de capacitación AWS de Morris & Opazo*
 
-## Estadísticas del Proyecto
+## 📊 Estadísticas del Proyecto
 
-- **4 laboratorios** completos
-- **24 directorios** organizados
-- **92 archivos** documentados
-- **3 horas** de contenido práctico
+| Métrica | Valor |
+|---------|-------|
+| 🧪 Laboratorios | 4 completos |
+| 📁 Directorios | 24 organizados |
+| 📄 Archivos | 92+ documentados |
+| ⏱️ Contenido | 3+ horas prácticas |
+| 🏗️ Servicios AWS | 10+ diferentes |
+
+## 🤝 Contribuir
+
+¿Quieres contribuir? ¡Genial! Lee nuestra [Guía de Contribución](CONTRIBUTING.md) para comenzar.
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
 
 ---
 
+<div align="center">
+
+**⭐ Si este repositorio te fue útil, ¡dale una estrella!**
+
 *Este repositorio documenta el proceso de aprendizaje práctico de servicios AWS, incluyendo tanto éxitos como desafíos encontrados durante la implementación.*
+
+</div>

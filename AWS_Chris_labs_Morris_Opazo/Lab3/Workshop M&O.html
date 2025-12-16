@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<!-- saved from url=(0026)https://workshop-mo.click/ -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop M&amp;O</title>
+    <link rel="stylesheet" href="./Workshop M&amp;O_files/style.css">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/sebasshb/stibaquira-elabs2025rlanda/refs/heads/main/public/favicon.ico">
+<link rel="stylesheet" href="chrome-extension://ihcjicgdanjaechkgeegckofjjedodee/app/content-style.css"></head>
+<body style="">
+    <div class="background-container">
+        <div class="background-glow"></div>
+        <div id="login-modal" class="modal hidden">
+            <img src="./Workshop M&amp;O_files/LogoMYO.png" alt="Logo Workshop" class="login-logo">
+            <div class="modal-content">
+                <h2>Iniciar Sesión</h2>
+                <form id="login-form">
+                    <label for="username">Email o UserID:</label>
+                    <input type="text" id="username" name="username" required="" style="">
+                    
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" required="" style="">
+                    
+                    <button type="submit" class="submit-button">Ingresar</button>
+                </form>
+                <p id="login-error" class="error-message"></p>
+            </div>
+        </div>
+
+        <div id="app-content" class="">
+            <div class="container">
+                <nav class="sidebar">
+                    <img src="./Workshop M&amp;O_files/LogoMYO.png" alt="Logo" class="sidebar-logo">
+                    
+                    <h2>Laboratorios</h2>
+                    <button onclick="loadLabContent(&#39;lab1.md&#39;)" class="lab-button">Lab 1</button>
+                    <button onclick="loadLabContent(&#39;lab2.md&#39;)" class="lab-button">Lab 2</button>
+                    <button onclick="loadLabContent(&#39;lab3.md&#39;)" class="lab-button">Lab 3</button>
+                    <button onclick="loadLabContent(&#39;lab4.md&#39;)" class="lab-button">Lab 4</button>
+                    <button onclick="logout()" class="logout-button">Cerrar Sesión</button>
+                    <p id="user-display" class="user-info">Sesión iniciada como:<br><strong>Christhian Rodriguez</strong></p>
+                    <img src="./Workshop M&amp;O_files/mario1.gif" alt="Mario 8-bit" class="mario-sidebar-gif">
+                </nav>
+
+                <main class="content" id="content-area">
+    <div class="audio-player-container">
+      <div class="audio-player-container-inner">
+        <h3>Escucha la guía del laboratorio 🎧</h3>
+        <audio controls="" src="lab3.wav"></audio>
+        <button class="start-lab-button" onclick="openStartLabModal(&#39;lab3.md&#39;)">Start Lab</button>
+      </div>
+    </div>
+  <div class="md-body"><h1>Laboratorio Serverless (DynamoDB - Lambda - API Gateway)</h1>
+<p><a href="https://workshopde-videos-lab.s3.us-east-1.amazonaws.com/Lab_Serverless.mp4">Ver vídeo guía</a></p>
+<p><strong>Objetivo General:</strong> Aprender a integrar servicios de AWS como DynamoDB, Lambda y API Gateway en una arquitectura serverless que simula una API de usuarios. Se desarrollará una función Lambda conectada a DynamoDB, expuesta mediante rutas en API Gateway y se validará su funcionamiento utilizando los métodos GET y POST desde el navegador y CloudShell. </p>
+<p><img src="./Workshop M&amp;O_files/arquitectura serverless (1).png" alt="Arquitectura AWS" style="cursor: zoom-in;"> </p>
+<p><strong>Tarea 1: Revisión de los recursos de laboratorio</strong></p>
+<ol>
+<li>En DynamoDB deberías encontrar una tabla llamada “Usuarios” con datos ya preestablecidos. En la tabla hay 20 usuarios y sólo algunos tienen contraseñas. Para encontrar la tabla debes ir a DynamoDB, luego en "Explorar Elementos" y seleccionar el círculo de la tabla "Usuarios"</li>
+<li>También, en IAM deberías encontrar un rol llamado "LambdaExecutionRole". Este rol otorga a la función Lambda los permisos necesarios para interactuar con DynamoDB, permitiéndole insertar y obtener elementos de la tabla Usuarios. Esto es fundamental tanto para levantar la tabla del laboratorio como para el correcto funcionamiento de tu nueva función. Al asignar este rol, estarás asegurando que la Lambda tenga los permisos adecuados para acceder a los recursos que necesita. </li>
+<li>Además, encontrarás una función Lambda llamada "ConfigUsuarios", ya creada, que carga automáticamente los datos necesarios para levantar el laboratorio con la tabla Usuarios preconfigurada.</li>
+</ol>
+<p><strong>Tarea 2: Crear una nueva función Lambda</strong></p>
+<ul>
+<li>En Lambda, debes crear una nueva función
+<img src="./Workshop M&amp;O_files/Captura de pantalla 2025-07-17 144737.png" alt="Lambda" style="cursor: zoom-in;"></li>
+<li>Debes nombrarla y en tiempo de ejecución seleccionar Python: 
+<img src="./Workshop M&amp;O_files/Captura de pantalla 2025-07-17 144749.png" alt="Lambda" style="cursor: zoom-in;">
+-La arquitectura dejarla tal cual. Luego en "Permisos" seleccionar "Cambiar el rol de ejecución predeterminado" y apretar "Uso de un rol existente" y seleccionar "LambdaExecutionRole"
+<img src="./Workshop M&amp;O_files/Diseño sin título.jpg" alt="Lambda" style="cursor: zoom-in;"></li>
+</ul>
+<p><strong>Tarea 3: Elaborar código de la función Lambda</strong></p>
+<ul>
+<li><p>Con lo anterior, la configuración de la función Lambda ya está lista. El siguiente paso es implementar el código que permitirá probar el flujo de las operaciones GET y POST sobre la tabla Usuarios</p>
+</li>
+<li><p>Actualmente, hay un código preconfigurado, pero debes reemplazarlo por un código que incluya el manejo de ambos métodos (POST y GET), además de establecer la conexión con DynamoDB para insertar y consultar datos correctamente.</p>
+</li>
+<li><p>Paso 1: Eliminar el código existente en el archivo lambda_function.py. </p>
+</li>
+<li><p>Paso 2: Agregar tu nuevo código, que incluya el flujo de las operaciones POST y GET, y la conexión con DynamoDB. </p>
+</li>
+<li><p>Paso 3: Verificar que el archivo esté guardado. Si aparece un círculo al lado de lambda_function.py, significa que aún no se ha guardado.</p>
+</li>
+<li><p>Paso 4: Una vez guardado, haz clic en "Deploy" para aplicar los cambios y actualizar la función Lambda.</p>
+</li>
+</ul>
+<h3><a href="https://workshop-mo.s3.us-east-1.amazonaws.com/script_lambda.py">Descarga el script aquí</a></h3>
+<p><img src="./Workshop M&amp;O_files/lambda.jpg" alt="Lambda" style="cursor: zoom-in;"></p>
+<p><strong>Tarea 4: Probar la función Lambda</strong></p>
+<ul>
+<li>Vamos a "Probar", creamos un nuevo evento y lo nombramos
+<img src="./Workshop M&amp;O_files/imagenes.jpg" alt="Lambda" style="cursor: zoom-in;"> </li>
+<li>Luego, debes insertar una solicitud en formato JSON según el tipo de operación que quieras probar. Primero, realiza una prueba con el método GET, cuyo objetivo es consultar qué "username" tienen contraseña registrada en la tabla Usuarios.</li>
+<li>Para ello debes en "Evento Json" rellenar con el tipo de solicitud y los parámetros necesarios. Después selecciona la opción "Test" o "Probar" para ejecutar la solicitud.</li>
+<li>En este caso, al consultar el usuario Hugo, el resultado es true, lo que indica que sí tiene contraseña registrada en la tabla Usuarios.</li>
+<li>Editamos el "username" a "Nacho". Vuelve a hacer click en "Test". Esta vez, el resultado será false, porque Nacho no tiene una contraseña registrada en la tabla
+<img src="./Workshop M&amp;O_files/imagenes (1).jpg" alt="Lambda" style="cursor: zoom-in;"> </li>
+<li>Ahora, para hacer la prueba con POST, se debe reemplazar el método HTTP por POST e incluye un objeto "body" con los datos que deseas insertar en la tabla Usuarios. </li>
+<li>Luego seleccionar nuevamente la opción "Test" para ejecutar la solicitud. Confirmamos en la tabla Usuarios que se haya agregado un nuevo elemento, antes eran 20, ahora son 21 y efectivamente se agregó "Anto". Y, de esta forma puedes ir agregando nuevos usuarios a la tabla. 
+<img src="./Workshop M&amp;O_files/imagenes (2).jpg" alt="Lambda" style="cursor: zoom-in;"></li>
+</ul>
+<p><strong>Tarea 5: Crear REST API</strong></p>
+<ul>
+<li>Debes ir a API Gateway y crear una REST API. Solo tienes que nombrarla, los demás valores dejalos tal cual
+<img src="./Workshop M&amp;O_files/Captura de pantalla 2025-07-17 165553.png" alt="API" style="cursor: zoom-in;"></li>
+<li>Ya con tu API creada debes crear un recurso. ¿Qué significa eso? API Gateway necesita saber qué ruta debe escuchar para dirigir las peticiones a tu función Lambda. Si no defines un recurso, no puedes asociarle métodos ni conectar con tu Lambda
+<img src="./Workshop M&amp;O_files/imagenes (3).jpg" alt="API" style="cursor: zoom-in;"></li>
+<li>Con el recurso ya listo puedes comenzar a configurar tus rutas a través de "Crear método". Es importante que estés creando los métodos con el recurso seleccionado, que sea vea celeste así como en la foto en donde el recurso es "/Usuarios" 
+<img src="./Workshop M&amp;O_files/Diseño sin título.png" alt="API" style="cursor: zoom-in;"></li>
+<li>Al momento de configurar el método debes seleccionar el tipo y repetir este proceso tanto para GET como para POST. Luego, seleccionar el tipo de integración la con la función lambda que creaste en la tarea 2. Y es muy importante que actives la "Lambda proxy integration". Como se ve a continuación en el ejemplo: 
+<img src="./Workshop M&amp;O_files/Diseño sin título (1).png" alt="API" style="cursor: zoom-in;"></li>
+<li>Debes escoger la función lambda que creaste en este laboratorio
+<img src="./Workshop M&amp;O_files/imagenes (4).jpg" alt="API" style="cursor: zoom-in;"></li>
+<li>Ya con los métodos GET y POST creados debes seleccionar "Implementar API" o "Deploy API"
+<img src="./Workshop M&amp;O_files/imagenes (5).jpg" alt="API" style="cursor: zoom-in;"></li>
+<li>Al colocar Deploy, se te pedirá nombrar una etapa (stage)</li>
+</ul>
+<p>¿Qué es hacer "Deploy"? Significa publicar oficialmente tu API. Hasta ese momento, todo lo que habías configurado (recursos, rutas, métodos, integraciones) estaba solo guardado como borrador dentro del panel de configuración de API Gateway.
+Al hacer el deploy tus rutas comienzan a estar activas, también se genera una Invoke URL que puedes usar para probar tu API en el navegador, Postman o desde código.</p>
+<ul>
+<li>Entonces presionas "nueva etapa", la nombras, luego haces click en "Implementación" y eso te llevará al URL de invocación que servirá para hacer las pruebas. Debes copiar ese URL
+<img src="./Workshop M&amp;O_files/imagenes (12).jpg" alt="API" style="cursor: zoom-in;"></li>
+</ul>
+<p><strong>Tarea 6: Probar API en el navegador y CloudShell</strong></p>
+<ul>
+<li><p>Para probar el método GET que servirá para consultar si un usuario tiene contraseña en la tabla Usuarios, debes abrir tu navegador y utilizar la siguiente estructura de URL: → invoke URL + /nombreRecurso + ?username=<nombre del="" usuario=""> de la tabla “Usuarios”. Esto te mostrará en pantalla true o false dependiendo de si el usuario tiene una contraseña registrada en la tabla Usuarios
+<img src="./Workshop M&amp;O_files/imagenes (8).jpg" alt="API" style="cursor: zoom-in;"></nombre></p>
+</li>
+<li><p>En el caso de POST. Este método te permite insertar un nuevo usuario en tu tabla DynamoDB. Para ello debes seguir los siguientes pasos:</p>
+</li>
+</ul>
+<ol>
+<li>Abre CloudShell: Haz clic en el icono de CloudShell (es un ícono de terminal) en la parte superior derecha de la consola de AWS.</li>
+<li>Pega el siguiente comando en la terminal, reemplazando InvokeURL por el que obtuviste al implementar tu API. Este comando envía una solicitud POST para insertar un nuevo usuario llamado Roberto, con país, color favorito y contraseña.</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/athena (17).jpg" alt="API" style="cursor: zoom-in;"></p>
+<pre><code>curl -X POST InvokeURL + /nombreRecurso \
+  -H "Content-Type: application/json" \
+  -d '{"username":"Roberto", "país":"Chile", "color_favorito":"verde", "password":"robert34"}'
+</code></pre>
+<ol start="3">
+<li>Verifica la tabla DynamoDB: Verás que se ha insertado una nueva fila con los datos del usuario Roberto.</li>
+</ol>
+<p><img src="./Workshop M&amp;O_files/athena (18).jpg" alt="API" style="cursor: zoom-in;"></p>
+<p><strong>DESAFÍO FINAL: Crea tu propia API con GET y POST</strong></p>
+<ul>
+<li><p>Usando el mismo flujo que desarrollaste en este laboratorio, crea una nueva API para manejar un conjunto de datos distinto. Por ejemplo, podrías crear una API para administrar libros de una biblioteca (con campos como título, autor, año). Debes crear una tabla DynamoDB nueva, separada de la tabla “Usuarios” que usaste en el laboratorio.</p>
+</li>
+<li><p>Tu API debe cumplir con lo siguiente:</p>
+</li>
+</ul>
+<ol>
+<li>Usar método POST para agregar nuevos registros a DynamoDB</li>
+<li>Usar método GET para consultar un registro específico por su identificador o algún campo clave</li>
+<li>Retornar mensajes personalizados en las respuestas (por ejemplo, “Libro agregado con éxito”)</li>
+</ol>
+<p><strong>(Opcional) Tarea 8: Probar el flujo de API con Postman</strong></p>
+<ul>
+<li>Instala Postman si es que no lo tienes, es un programa útil para el trabajo con APIs</li>
+<li>Luego, en API Gateway busca la URL base para Postman que está conformada por el Invoke URL del stage + /(nombre de ruta GET o Post) </li>
+<li>Para el caso de GET pones el URL en Postman y lo manejas desde “Params” con “username” y value </li>
+<li>Para POST utilizas el mismo URL, cambias la ruta y te diriges a body en que llenas los datos que deseas insertar en modo JSON.</li>
+</ul>
+<p><strong>¡Felicidades, has completado el laboratorio!</strong></p>
+</div></main>
+            </div>
+
+            <div id="start-lab-modal" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close-button" onclick="closeStartLabModal()">×</span>
+                    <h2>Iniciar Laboratorio</h2>
+                    <p>Por favor, ingresa tus datos para comenzar.</p>
+                    <form id="lab-form">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" required="">
+                        
+                        <label for="apellidos">Apellidos:</label>
+                        <input type="text" id="apellidos" name="apellidos" required="">
+
+                        <label for="correo">Correo Electrónico:</label>
+                        <input type="email" id="correo" name="correo" required="">
+                        
+                        <button type="submit" class="submit-button">Registrar y Empezar</button>
+                    </form>
+                    <pre id="api-error" class="error-message"></pre>
+                </div>
+            </div>
+        </div>
+
+        <script src="./Workshop M&amp;O_files/marked.min.js"></script>
+        <script src="./Workshop M&amp;O_files/script.js"></script>
+    </div>
+
+<deepl-input-controller translate="no"><template shadowrootmode="open"><link rel="stylesheet" href="chrome-extension://cofdbpoegempjloogbagkncekinflcnj/build/content.css"><div dir="ltr" style="visibility: initial !important;"><div class="dl-input-translation-container svelte-95aucy"><div></div></div></div></template></deepl-input-controller><protonpass-root-36a3 data-protonpass-role="root" data-protonpass-theme="dark"><template shadowrootmode="closed"></template></protonpass-root-36a3></body></html>

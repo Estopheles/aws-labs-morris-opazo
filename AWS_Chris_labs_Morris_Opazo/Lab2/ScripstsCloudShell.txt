@@ -1,0 +1,6 @@
+sqlcmd -S stackset-dms-03-de-sept-wmo-8818b06-labrdsinstance-9bfiyhus0r1i.ce962cyuqxzd.us-east-1.rds.amazonaws.com -U admin -P "#LabDBase3!" -Q "CREATE DATABASE UniversityDB;"
+
+sqlcmd -S stackset-dms-03-de-sept-wmo-8818b06-labrdsinstance-9bfiyhus0r1i.ce962cyuqxzd.us-east-1.rds.amazonaws.com -U admin -P "#LabDBase3!" -d UniversityDB -i worldurank.sql
+
+sqlcmd -S stackset-dms-03-de-sept-wmo-8818b06-labrdsinstance-9bfiyhus0r1i.ce962cyuqxzd.us-east-1.rds.amazonaws.com -U admin -P "#LabDBase3!" -d UniversityDB -Q "SELECT TOP 5 * FROM UniversityScores;"
+

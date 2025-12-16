@@ -1,0 +1,53 @@
+name: Documentation Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Check README files exist
+      run: |
+        echo "Checking main README..."
+        test -f README.md || (echo "Main README.md missing" && exit 1)
+        
+        echo "Checking lab READMEs..."
+        for lab in lab-01-rds-fundamentals lab-02-dms-migration lab-03-serverless lab-04-athena-quest; do
+          test -f "$lab/README.md" || (echo "$lab/README.md missing" && exit 1)
+          echo "✅ $lab/README.md found"
+        done
+    
+    - name: Check required files
+      run: |
+        echo "Checking required project files..."
+        test -f LICENSE || (echo "LICENSE missing" && exit 1)
+        test -f CONTRIBUTING.md || (echo "CONTRIBUTING.md missing" && exit 1)
+        test -f SECURITY.md || (echo "SECURITY.md missing" && exit 1)
+        test -f CODE_OF_CONDUCT.md || (echo "CODE_OF_CONDUCT.md missing" && exit 1)
+        test -f CHANGELOG.md || (echo "CHANGELOG.md missing" && exit 1)
+        echo "✅ All required files present"
+    
+    - name: Check for sensitive data
+      run: |
+        echo "Checking for potential sensitive data..."
+        if grep -r "AKIA\|aws_access_key\|aws_secret" --exclude-dir=.git .; then
+          echo "❌ Potential AWS credentials found!"
+          exit 1
+        fi
+        echo "✅ No sensitive data detected"
+    
+    - name: Validate markdown links
+      run: |
+        echo "Checking for broken internal links..."
+        # Simple check for common broken link patterns
+        if grep -r "\]\(\./" --include="*.md" . | grep -v "README.md\|docs/\|screenshots/"; then
+          echo "⚠️  Potential broken links found - please verify"
+        fi
+        echo "✅ Link check completed"

@@ -1,10 +1,23 @@
-# Lab 01: RDS Fundamentals - Crear Instancia RDS
+# 🗄️ Lab 01: RDS Fundamentals - Crear Instancia RDS
 
-## Objetivo
+[![AWS RDS](https://img.shields.io/badge/AWS-RDS-orange.svg)](https://aws.amazon.com/rds/)
+[![SQL Server](https://img.shields.io/badge/Database-SQL%20Server-blue.svg)](https://www.microsoft.com/sql-server/)
+[![Difficulty](https://img.shields.io/badge/Difficulty-Beginner-green.svg)](#)
+[![Duration](https://img.shields.io/badge/Duration-45%20min-yellow.svg)](#)
 
-Crear una instancia Amazon RDS (Microsoft SQL Server) dentro de una VPC existente, configurando los componentes de red y seguridad necesarios para una base de datos funcional y segura.
+> 🎯 **Objetivo:** Crear una instancia Amazon RDS (Microsoft SQL Server) dentro de una VPC existente, configurando los componentes de red y seguridad necesarios para una base de datos funcional y segura.
 
-## Arquitectura del Lab
+## 📋 Tabla de Contenidos
+
+- [Arquitectura del Lab](#-arquitectura-del-lab)
+- [Prerrequisitos](#-prerrequisitos)
+- [Componentes a Crear](#-componentes-a-crear)
+- [Pasos de Implementación](#-pasos-de-implementación)
+- [Verificación](#-verificación)
+- [Troubleshooting](#-troubleshooting)
+- [Próximo Lab](#-próximo-lab)
+
+## 🏗️ Arquitectura del Lab
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -30,14 +43,14 @@ Crear una instancia Amazon RDS (Microsoft SQL Server) dentro de una VPC existent
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## Prerrequisitos
+## ✅ Prerrequisitos
 
 - **VPC Existente:** Lab-VPC ya configurada por CloudFormation
 - **Subnets:** Al menos 2 subnets en diferentes AZ
 - **Route Tables:** Configuradas para acceso a internet
 - **Internet Gateway:** Conectado a la VPC
 
-## Componentes a Crear
+## 🔧 Componentes a Crear
 
 ### 1. Security Group para RDS
 
@@ -66,7 +79,7 @@ Crear una instancia Amazon RDS (Microsoft SQL Server) dentro de una VPC existent
 - **Usuario:** admin
 - **Contraseña:** #LabDBase3!
 
-## Pasos de Implementación
+## 🚀 Pasos de Implementación
 
 ### Paso 1: Crear Security Group
 
@@ -110,13 +123,13 @@ Crear una instancia Amazon RDS (Microsoft SQL Server) dentro de una VPC existent
    - VPC security group: `RDS-SecurityGroup`
    - Availability Zone: `us-east-1b`
 
-### Paso 4: Verificar Creación
+## ✅ Verificación
 
 1. Esperar que el estado cambie a **Available** (~5-10 minutos)
 2. Verificar el endpoint en los detalles de la instancia
 3. Confirmar configuración de VPC, subnet group y security group
 
-## Archivos del Proyecto
+## 📁 Archivos del Proyecto
 
 ```
 lab-01-rds-fundamentals/
@@ -149,7 +162,7 @@ lab-01-rds-fundamentals/
 
 **Documentación completa:** Ver `docs/lab-01-02-rds-dms-report.pdf` en la raíz del proyecto.
 
-## Configuraciones Específicas
+## ⚙️ Configuraciones Específicas
 
 ### Security Group Rules
 
@@ -181,7 +194,7 @@ lab-01-rds-fundamentals/
 - **Multi-AZ:** No (Free Tier)
 - **Backup Retention:** 7 días (por defecto)
 
-## Resultados Esperados
+## 🎯 Resultados Esperados
 
 ### Instancia RDS Creada
 
@@ -198,7 +211,7 @@ lab-01-rds-fundamentals/
 - Security Group permite tráfico en puerto 1433
 - Instancia ubicada en Availability Zone us-east-1b
 
-## Troubleshooting Común
+## 🔧 Troubleshooting Común
 
 ### Error: "DB subnet group doesn't meet AZ coverage requirement"
 
@@ -212,7 +225,7 @@ lab-01-rds-fundamentals/
 
 **Solución:** Verificar que las reglas de entrada estén configuradas correctamente y aplicadas al security group correcto
 
-## Lecciones Aprendidas
+## 📚 Lecciones Aprendidas
 
 ### Conceptos Clave
 
@@ -232,7 +245,7 @@ lab-01-rds-fundamentals/
 
 Esta instancia RDS será utilizada en **Lab 02: DMS Migration** como fuente para la migración a Amazon Redshift.
 
-## Comandos Útiles
+## 💻 Comandos Útiles
 
 ### AWS CLI para Verificación
 
@@ -247,7 +260,7 @@ aws ec2 describe-security-groups --group-names RDS-SecurityGroup
 aws rds describe-db-subnet-groups --db-subnet-group-name RDS-SubnetGroup
 ```
 
-## Estimación de Tiempo
+## ⏱️ Estimación de Tiempo
 
 - **Preparación:** 5 minutos
 - **Creación Security Group:** 5 minutos
@@ -258,6 +271,6 @@ aws rds describe-db-subnet-groups --db-subnet-group-name RDS-SubnetGroup
 
 **Total:** ~45 minutos
 
-## Próximo Lab
+## ➡️ Próximo Lab
 
 Una vez completado este laboratorio, la instancia RDS estará lista para ser utilizada como fuente de datos en el **Lab 02: Migración de Datos con DMS**, donde migraremos esta base de datos a Amazon Redshift.
